@@ -1,10 +1,11 @@
-const { model, models, Schema } = require("mongoose");
+const { model, models, Schema, Types } = require("mongoose");
 import "./User";
 const schema = new Schema(
   {
     title: { type: String, required: true },
     isComplete: { type: Boolean, default: false },
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Types.ObjectId, ref: "User", required: true },
+    writer: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
   },
   {
     timestamps: true,

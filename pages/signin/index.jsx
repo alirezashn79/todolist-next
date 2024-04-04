@@ -7,6 +7,9 @@ import { client } from "@/configs/client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { verifyToken } from "@/utils/auth";
+import { UserModel } from "@/models/User";
+import { connectToDB } from "@/configs/db-connection";
 
 const schema = yup.object().shape({
   identifier: yup.string().required(),
@@ -20,6 +23,7 @@ export default function SignInPage() {
     register,
     formState: { errors },
   } = useForm({
+    mode: "onBlur",
     defaultValues: {
       identifier: "",
       password: "",
@@ -30,10 +34,8 @@ export default function SignInPage() {
   const onSubmit = async (values) => {
     try {
       const res = await client.post("/auth/signin", values);
-      console.log("values =>", values);
-      console.log("res =>", res);
       if (res.status === 200) {
-        localStorage.setItem("user", JSON.stringify(res.data.data));
+        // localStorage.setItem("user", JSON.stringify(res.data.data));
         toast.success(res.data.message);
         setTimeout(() => {
           router.replace("/");
@@ -57,7 +59,7 @@ export default function SignInPage() {
               id="identifier"
               autoFocus={true}
               type="text"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent"
+              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
               placeholder="Enter username or email"
             />
             <ErrorMessage
@@ -75,7 +77,7 @@ export default function SignInPage() {
               {...register("password")}
               id="password"
               type="password"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent"
+              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
               placeholder="Enter password"
             />
             <ErrorMessage
@@ -102,4 +104,33 @@ export default function SignInPage() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  // !  check token
+  const { token } = context.req.cookies;
+
+  if (!!token) {
+    // !  verify token
+    const isVerifyToken = verifyToken(token);
+
+    if (!!isVerifyToken) {
+      // !  connect to database
+      await connectToDB();
+    }
+    // !  check user
+    const user = await UserModel.findOne({ email: isVerifyToken.email });
+
+    if (!!user) {
+      return {
+        redirect: {
+          destination: "/",
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
 }

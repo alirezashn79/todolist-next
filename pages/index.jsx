@@ -1,22 +1,38 @@
+import { client } from "@/configs/client";
 import { User, ClipboardPlus, LogOut, Trash2, SquarePen } from "lucide-react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { verifyToken } from "@/utils/auth";
+import { connectToDB } from "@/configs/db-connection";
+import { UserModel } from "@/models/User";
 
-export default function IndexPage() {
+export default function IndexPage({ user }) {
   // states
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const [openSearch, setOpenSearch] = useState(false);
   const [todoForm, setTodoForm] = useState("");
   const [isChecked, setIsChecked] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
+  // const [currentUser, setCurrentUser] = useState(null);
 
-  // variables
+  // hooks
+  const router = useRouter();
 
   // handlers
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (todoForm.trim()) {
-      console.log({ todo: todoForm });
+      try {
+        const res = await client.post("/todo", { title: todoForm });
+        console.log(res);
+        if (res.status === 201) {
+          setTodoForm("");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -45,14 +61,29 @@ export default function IndexPage() {
     });
   };
 
+  const handleLogout = async () => {
+    try {
+      const res = await client.get("/auth/signout");
+      if (res.status === 200) {
+        toast.success("logout ❤️👋");
+        setTimeout(() => {
+          router.replace("/signin");
+        }, 1000);
+      }
+    } catch (error) {
+      toast.success("Error");
+    }
+  };
+
   // lifecycles
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setCurrentUser(user);
-  }, []);
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   setCurrentUser(user);
+  // }, []);
 
   return (
     <main>
+      <ToastContainer />
       <header className="fixed top-0 left-0 right-0 bg-slate-700 h-16">
         <div className="relative container h-full">
           <div className="w-full h-full flex items-center justify-between">
@@ -64,12 +95,12 @@ export default function IndexPage() {
             >
               <User className="icon" />
               <h3 className="text-sm md:text-base lg:text-lg font-semibold capitalize">
-                {currentUser?.firstname} {currentUser?.lastname}
+                {user?.firstname} {user?.lastname}
               </h3>
               {isOpenProfile && (
                 <div className="absolute top-full mt-6 lg:mt-5 bg-slate-700  border border-slate-800 rounded-lg  w-32 md:w-36 lg:w-40 p-1 z-10">
                   <div
-                    onClick={() => console.log("click")}
+                    onClick={handleLogout}
                     className="h-10 flex items-center justify-center gap-2 w-full font-semibold text-rose-500 hover:bg-rose-500 hover:text-slate-50 rounded-md transition-colors cursor-pointer"
                   >
                     <LogOut className="h-5 w-5" />
@@ -175,4 +206,43 @@ export default function IndexPage() {
       </section>
     </main>
   );
+}
+
+export async function getServerSideProps(context) {
+  // ! check cookie exist
+  const { token } = context.req.cookies;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+    };
+  }
+
+  // ! verify token
+  const isVerifyToken = verifyToken(token);
+
+  if (!isVerifyToken) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+    };
+  }
+
+  // ! connect to database
+  await connectToDB();
+
+  // !  find email
+  const user = await UserModel.findOne(
+    { email: isVerifyToken.email },
+    "_id firstname lastname email"
+  );
+
+  return {
+    props: {
+      user: JSON.parse(JSON.stringify(user)),
+    },
+  };
 }
