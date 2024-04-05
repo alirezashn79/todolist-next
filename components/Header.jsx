@@ -3,7 +3,7 @@ import { User, ClipboardPlus, LogOut } from "lucide-react";
 import AddForm from "./AddForm";
 import Profile from "./Profile";
 
-export default function Header({ user, setReload }) {
+export default function Header({ user, getAllTodos }) {
   // states
   const [openAddTodoForm, setOpenAddTodoForm] = useState(false);
 
@@ -34,7 +34,7 @@ export default function Header({ user, setReload }) {
             <ClipboardPlus className="icon" />
           </button>
           {/* add btn end */}
-          {openAddTodoForm && <AddForm setReload={setReload} />}
+          {openAddTodoForm && <AddForm getAllTodos={getAllTodos} />}
         </div>
       </div>
     </header>

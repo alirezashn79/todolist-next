@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import TodoCard from "../TodoCard";
 
-export default function Accordion({ todoList, setReload }) {
+export default function Accordion({ todoList, setReload, getAllTodos }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -39,7 +39,12 @@ export default function Accordion({ todoList, setReload }) {
       {isOpen && (
         <div className="p-2 space-y-2 bg-slate-800">
           {todoList.map((todo) => (
-            <TodoCard todo={todo} setReload={setReload} />
+            <TodoCard
+              getAllTodos={getAllTodos}
+              key={todo._id}
+              todo={todo}
+              setReload={setReload}
+            />
           ))}
         </div>
       )}

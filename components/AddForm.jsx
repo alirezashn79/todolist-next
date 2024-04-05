@@ -1,8 +1,7 @@
 import { client } from "@/configs/client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AddForm({ setReload }) {
+export default function AddForm({ getAllTodos }) {
   // states
   const [inputData, setInputData] = useState("");
 
@@ -11,11 +10,11 @@ export default function AddForm({ setReload }) {
     e.preventDefault();
     if (inputData.trim()) {
       try {
-        const res = await client.post("/todo", { title: inputData });
+        const res = await client.post("/todos", { title: inputData });
         console.log(res);
         if (res.status === 201) {
           setInputData("");
-          setReload((prev) => !prev);
+          getAllTodos();
         }
       } catch (error) {
         console.log(error);

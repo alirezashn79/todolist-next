@@ -1,6 +1,6 @@
 import Accordion from "./Accordion";
 
-export default function TodoList({ todos, setReload }) {
+export default function TodoList({ todos, setReload, getAllTodos }) {
   // const users = [...new Set(todos?.map((todo) => todo.user._id))];
 
   // const todosList = users.map((user) => {
@@ -9,7 +9,12 @@ export default function TodoList({ todos, setReload }) {
   return (
     <div className="space-y-4">
       {todos.map((todoList) => (
-        <Accordion setReload={setReload} todoList={todoList} />
+        <Accordion
+          key={todoList._id}
+          setReload={setReload}
+          todoList={todoList}
+          getAllTodos={getAllTodos}
+        />
       ))}
     </div>
   );

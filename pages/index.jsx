@@ -1,4 +1,4 @@
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { verifyToken } from "@/utils/auth";
 import { connectToDB } from "@/configs/db-connection";
@@ -9,13 +9,13 @@ import { useEffect, useState } from "react";
 // import { client } from "@/configs/client";
 import TodoList from "@/components/Admin/TodoList";
 import { TodoModel } from "@/models/Todo";
-import { totalTodos } from "@/utils/utils";
+import { listedTodosForAdmin, totalTodos } from "@/utils/utils";
+import { client } from "@/configs/client";
 
 export default function IndexPage({ user, todos }) {
   // states
   // const [currentUser, setCurrentUser] = useState(null);
   // const [todos, setTodos] = useState([]);
-  const [reload, setReload] = useState(false);
   const [allTodos, setAllTodos] = useState([...todos]);
 
   // useEffect(() => {
@@ -41,10 +41,29 @@ export default function IndexPage({ user, todos }) {
   //   setCurrentUser(user);
   // }, []);
 
+  const getAllTodos = async () => {
+    try {
+      const res = await client.get("/todos");
+      const todosList = res.data.data;
+
+      if (res.status === 200) {
+        if (user.role === "ADMIN") {
+          const newTodos = listedTodosForAdmin(todosList);
+          setAllTodos(newTodos);
+        } else if (user.role === "USER") {
+          setAllTodos(todosList);
+        }
+      }
+    } catch (error) {
+      toast.error(error.response.message);
+      console.log(error);
+    }
+  };
+
   return (
     <main>
       <ToastContainer />
-      <Header user={user} setReload={setReload} />
+      <Header user={user} getAllTodos={getAllTodos} />
 
       <section className="mt-32">
         <div className="container rounded-t-lg">
@@ -54,7 +73,10 @@ export default function IndexPage({ user, todos }) {
                 <div className="sticky top-0 bg-slate-900 pt-3 pb-1 px-4">
                   <h3 className="text-xl font-semibold mb-4">
                     All Todos (
-                    {user.role === "ADMIN" ? totalTodos(todos) : todos.length})
+                    {user.role === "ADMIN"
+                      ? totalTodos(allTodos)
+                      : allTodos.length}
+                    )
                   </h3>
                   <hr />
                 </div>
@@ -62,11 +84,11 @@ export default function IndexPage({ user, todos }) {
                 <div className="space-y-4 py-3 px-4">
                   {/* card */}
                   {user.role === "ADMIN" ? (
-                    <TodoList setReload={setReload} todos={allTodos} />
+                    <TodoList getAllTodos={getAllTodos} todos={allTodos} />
                   ) : (
                     allTodos.map((todo) => (
                       <TodoCard
-                        setReload={setReload}
+                        getAllTodos={getAllTodos}
                         todo={todo}
                         key={todo._id}
                       />
@@ -114,17 +136,12 @@ export async function getServerSideProps(context) {
   // !  find email
   const user = await UserModel.findOne(
     { email: isVerifyToken.email },
-    "_id firstname lastname email role"
+    "firstname lastname role"
   );
   let todos;
   if (user.role === "ADMIN") {
     const allTodos = await TodoModel.find({}).populate("user").exec();
-    const users = [...new Set(allTodos.map((todo) => todo.user._id))];
-    console.log(users);
-    todos = users.map((user) => {
-      return allTodos.filter((todo) => todo.user._id === user);
-    });
-    console.log(todos);
+    todos = listedTodosForAdmin(allTodos);
   } else if (user.role === "USER") {
     todos = await TodoModel.find().where({ user: user._id });
   } else {

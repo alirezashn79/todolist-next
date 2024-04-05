@@ -24,6 +24,10 @@ export default async function handler(req, res) {
 
     const user = await UserModel.findOne({ email: tokenPayload.email }, "role");
 
+    if (!user) {
+      return res.status(404).json({ message: "user not found...!" });
+    }
+
     switch (user.role) {
       case "ADMIN": {
         const todos = await TodoModel.find({})

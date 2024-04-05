@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 export default function TodoCard({
   todo: { _id, title, isComplete, user, writer },
-  setReload,
+  getAllTodos,
 }) {
   // states
   const [isChecked, setIsChecked] = useState(isComplete || false);
@@ -16,14 +16,17 @@ export default function TodoCard({
   const onChange = async (e) => {
     try {
       e.preventDefault();
-      const res = await client.patch("/todo/edit", {
+      const res = await client.patch(`/todos/${_id}`, {
         id: _id,
         title: titleText,
         isComplete: e.target.checked,
       });
       if (res.status === 200) {
-        e.target.type === "checkbox" && setIsChecked((prev) => !prev);
-        setReload((prev) => !prev);
+        if (e.target.type === "checkbox") {
+          setIsChecked((prev) => !prev);
+          getAllTodos();
+        }
+
         setOpenEdit(false);
       }
     } catch (error) {
@@ -47,21 +50,16 @@ export default function TodoCard({
     }).then((result) => {
       if (result.isConfirmed) {
         client
-          .delete(`/todo/delete`, {
-            id: _id,
-          })
+          .delete(`/todos/${_id}`)
           .then((res) => {
-            console.log(res);
-            if (res.status === 200) {
-              setReload((prev) => !prev);
-            }
-          });
-
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
+            getAllTodos();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+          })
+          .catch((err) => console.log(err.response.data));
       }
     });
   };
