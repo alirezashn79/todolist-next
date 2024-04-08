@@ -102,6 +102,12 @@ export default function TodoCard({
         </p>
       )}
 
+      {!!writer && writer === "ADMIN" && (
+        <p className="bg-purple-500 text-white ml-4 p-0.5 rounded-md">
+          By Admin
+        </p>
+      )}
+
       <div className="ml-auto">
         {!isChecked && (
           <button
