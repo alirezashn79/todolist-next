@@ -44,8 +44,8 @@ export default function TodoCard({
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#e11d48",
-      color: "#f8fafc",
-      background: "#1e293b",
+      // color: "#f8fafc",
+      // background: "#1e293b",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -81,13 +81,13 @@ export default function TodoCard({
             type="text"
             value={titleText}
             onChange={(e) => setTitleText(e.target.value)}
-            className="text-slate-100 ml-4 bg-transparent border-b outline-none text-base"
+            className="dark:text-slate-100 ml-4 bg-transparent border-b border-b-slate-800 dark:border-b-slate-100 outline-none text-base"
             placeholder="todo name"
             autoFocus={true}
           />
           <button
             type="submit"
-            className="text-slate-100 bg-sky-500 p-0.5 ml-1"
+            className="dark:text-slate-100 dark:bg-sky-500 bg-slate-400 p-1 rounded ml-1"
           >
             submit
           </button>

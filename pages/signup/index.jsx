@@ -61,8 +61,8 @@ export default function SignUpPage() {
   };
   return (
     <div className="w-screen h-screen mt-20 md:mt-0 flex md:items-center justify-center">
-      <ToastContainer />
-      <div className="h-fit bg-slate-600 w-96 px-4 py-1.5 rounded-md capitalize">
+      {/* <ToastContainer /> */}
+      <div className="form-box">
         <h2 className="text-2xl font-semibold text-center">SignUp Form</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-2 flex flex-col gap-y-2">
@@ -72,7 +72,7 @@ export default function SignUpPage() {
               autoFocus
               id="firstname"
               type="text"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter username or email"
             />
             <ErrorMessage
@@ -90,7 +90,7 @@ export default function SignUpPage() {
               {...register("lastname")}
               id="lastname"
               type="text"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter username or email"
             />
             <ErrorMessage
@@ -108,7 +108,7 @@ export default function SignUpPage() {
               {...register("username")}
               id="username"
               type="text"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter username or email"
             />
             <ErrorMessage
@@ -126,7 +126,7 @@ export default function SignUpPage() {
               {...register("email")}
               id="email"
               type="email"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter username or email"
             />
             <ErrorMessage
@@ -144,7 +144,7 @@ export default function SignUpPage() {
               {...register("password")}
               id="password"
               type="password"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter password"
             />
             <ErrorMessage
@@ -157,14 +157,12 @@ export default function SignUpPage() {
           </div>
 
           <div className="flex justify-center">
-            <button className="bg-slate-700 py-3 rounded-md px-8">
-              submit
-            </button>
+            <button className="form-btn">submit</button>
           </div>
         </form>
         <div className="mt-1">
           <span>Do you have an account? </span>
-          <Link className="text-indigo-300 underline" href="/signin">
+          <Link className="form-link" href="/signin">
             signin
           </Link>
         </div>

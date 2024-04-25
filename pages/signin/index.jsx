@@ -48,8 +48,8 @@ export default function SignInPage() {
   };
   return (
     <div className="w-screen h-screen mt-20 md:mt-0 flex md:items-center justify-center">
-      <ToastContainer />
-      <div className="h-fit bg-slate-600 w-96 p-4 rounded-md capitalize">
+      {/* <ToastContainer /> */}
+      <div className="form-box">
         <h2 className="text-2xl font-semibold text-center">Signin Form</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-4 flex flex-col gap-y-2">
@@ -59,7 +59,7 @@ export default function SignInPage() {
               id="identifier"
               autoFocus={true}
               type="text"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter username or email"
             />
             <ErrorMessage
@@ -77,7 +77,7 @@ export default function SignInPage() {
               {...register("password")}
               id="password"
               type="password"
-              className="p-2 border-2 border-slate-50 rounded-lg bg-transparent outline-none"
+              className="form-input"
               placeholder="Enter password"
             />
             <ErrorMessage
@@ -90,14 +90,12 @@ export default function SignInPage() {
           </div>
 
           <div className="flex justify-center">
-            <button className="bg-slate-700 py-3 rounded px-8 disabled:opacity-50">
-              submit
-            </button>
+            <button className="form-btn">submit</button>
           </div>
         </form>
         <div className="mt-1">
           <span>Have you not registered? </span>
-          <Link className="text-indigo-300 underline" href="/signup">
+          <Link className="form-link" href="/signup">
             signup
           </Link>
         </div>

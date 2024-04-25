@@ -52,21 +52,21 @@ export default function AddTodoByAdmin({ users }) {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-10 mt-10 md:mt-0">
       <div className="flex justify-end">
-        <Link className="p-2 rounded-lg border" href="/">
+        <Link className="form-btn" href="/">
           Home
         </Link>
       </div>
-      <ToastContainer />
-      <div className="w-1/3">
+      {/* <ToastContainer /> */}
+      <div className="md:w-1/3 w-full">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-8">
             <div className="space-y-4">
               <label htmlFor="userId">User</label>
               <select
                 {...register("userId")}
-                className="w-full bg-transparent border p-1.5 rounded-lg"
+                className="form-input w-full"
                 id="userId"
                 defaultValue="-1"
               >
@@ -74,7 +74,10 @@ export default function AddTodoByAdmin({ users }) {
                   --select user---
                 </option>
                 {users.map((user) => (
-                  <option className="bg-slate-600" value={user._id}>
+                  <option
+                    className="dark:bg-slate-600 bg-slate-200"
+                    value={user._id}
+                  >
                     {user.firstname} {user.lastname}
                   </option>
                 ))}
@@ -88,7 +91,7 @@ export default function AddTodoByAdmin({ users }) {
               <label htmlFor="todo">todo</label>
               <input
                 {...register("todo")}
-                className="w-full bg-transparent border p-1.5 rounded-lg"
+                className="w-full form-input"
                 id="todo"
                 placeholder="todo title"
               />
@@ -105,10 +108,7 @@ export default function AddTodoByAdmin({ users }) {
               </div>
             </div>
 
-            <button
-              className="bg-slate-100 text-slate-800 py-2 px-4 rounded-lg border"
-              type="submit"
-            >
+            <button className="form-btn" type="submit">
               submit
             </button>
           </div>

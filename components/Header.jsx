@@ -9,7 +9,7 @@ export default function Header({ user, getAllTodos }) {
   const [openAddTodoForm, setOpenAddTodoForm] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-slate-700 h-16">
+    <header className="header">
       <div className="relative container h-full">
         <div className="w-full h-full flex items-center justify-between">
           {/* name and avatar */}
@@ -24,14 +24,14 @@ export default function Header({ user, getAllTodos }) {
           </div>
           {/* heading text end */}
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center flex-wrap gap-4">
             {/* add btn */}
             <button
               onClick={() => setOpenAddTodoForm((prev) => !prev)}
               className={`flex items-center gap-2 border px-3 py-1.5 rounded-lg  transition-colors ${
                 openAddTodoForm
-                  ? "bg-slate-50 text-slate-800"
-                  : "bg-transparent text-slate-50"
+                  ? "bg-slate-50 dark:text-slate-800"
+                  : "bg-transparent dark:text-slate-50"
               }`}
             >
               <span className="text-sm md:text-base">add todo</span>
@@ -42,9 +42,14 @@ export default function Header({ user, getAllTodos }) {
 
             {/* add todo by admin */}
             {user.role === "ADMIN" && (
-              <Link className="border p-2 rounded-lg" href="/admin/add-todo">
-                Add Todo for a User
-              </Link>
+              <>
+                <Link className="border p-2 rounded-lg" href="/admin/add-todo">
+                  Add Todo for a User
+                </Link>
+                <Link className="border p-2 rounded-lg" href="/admin/users">
+                  users
+                </Link>
+              </>
             )}
             {/* add todo by admin end */}
           </div>

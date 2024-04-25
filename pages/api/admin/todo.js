@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
     if (user.role !== "ADMIN") {
       return res.status(401).json({
-        message: "you is not allow to define todo for other users...!",
+        message: "you are not allow to define todo for other users...!",
       });
     }
 

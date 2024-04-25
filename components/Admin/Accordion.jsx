@@ -10,7 +10,9 @@ export default function Accordion({ todoList, setReload, getAllTodos }) {
       <div
         onClick={() => setIsOpen((prev) => !prev)}
         className={`${
-          isOpen ? "bg-slate-700 rounded-t-lg" : "bg-slate-500 rounded-lg"
+          isOpen
+            ? "dark:bg-slate-700 bg-slate-400 rounded-t-lg"
+            : "dark:bg-slate-500 bg-slate-300 rounded-lg"
         } h-16  flex items-center justify-between px-5 cursor-pointer font-semibold text-lg`}
       >
         <div className="flex items-center gap-x-4 ">
@@ -37,7 +39,7 @@ export default function Accordion({ todoList, setReload, getAllTodos }) {
         />
       </div>
       {isOpen && (
-        <div className="p-2 space-y-2 bg-slate-800">
+        <div className="p-2 space-y-2 dark:bg-slate-800 bg-slate-300">
           {todoList.map((todo) => (
             <TodoCard
               getAllTodos={getAllTodos}

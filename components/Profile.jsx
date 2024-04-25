@@ -37,7 +37,7 @@ export default function Profile({ user }) {
         {user?.firstname} {user?.lastname}
       </h3>
       {isOpenProfile && (
-        <div className="absolute top-full mt-6 lg:mt-5 bg-slate-700  border border-slate-800 rounded-lg  w-32 md:w-36 lg:w-40 p-1 z-10">
+        <div className="absolute top-full mt-6 lg:mt-5 dark:bg-slate-700 bg-slate-200  border dark:border-slate-800 border-slate-300 rounded-lg  w-32 md:w-36 lg:w-40 p-1">
           <div
             onClick={onLogout}
             className="h-10 flex items-center justify-center gap-2 w-full font-semibold text-rose-500 hover:bg-rose-500 hover:text-slate-50 rounded-md transition-colors cursor-pointer"

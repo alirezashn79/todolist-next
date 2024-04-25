@@ -62,15 +62,15 @@ export default function IndexPage({ user, todos }) {
 
   return (
     <main>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <Header user={user} getAllTodos={getAllTodos} />
 
-      <section className="mt-32">
+      <section className="mt-44 md:mt-36">
         <div className="container rounded-t-lg">
-          <div className="w-full lg:w-3/4 max-h-[650px] md:max-h-[550px] overflow-auto bg-slate-900 mx-auto rounded-lg">
+          <div className="w-full lg:w-3/4 max-h-[650px] md:max-h-[550px] overflow-auto dark:bg-slate-900 bg-slate-200 mx-auto rounded-lg">
             {allTodos.length ? (
               <>
-                <div className="sticky top-0 bg-slate-900 pt-3 pb-1 px-4">
+                <div className="sticky top-0 dark:bg-slate-900 bg-slate-300 pt-3 pb-1 px-4">
                   <h3 className="text-xl font-semibold mb-4">
                     All Todos (
                     {user.role === "ADMIN"

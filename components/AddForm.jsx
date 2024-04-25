@@ -23,13 +23,13 @@ export default function AddForm({ getAllTodos }) {
   };
 
   return (
-    <div className="absolute min-h-10 p-1 bg-slate-700 top-full right-4 left-4 lg:right-24 lg:left-24 mt-1 rounded-lg">
+    <div className="absolute min-h-10 p-1 dark:bg-slate-700 bg-slate-200 top-full right-4 left-4 lg:right-24 lg:left-24 mt-1 rounded-lg">
       <form onSubmit={onAddTodo}>
         <div className="flex gap-x-2">
           <input
             value={inputData}
             onChange={(e) => setInputData(e.target.value)}
-            className="flex-1 p-2 bg-transparent outline-none border border-slate-50 rounded-md"
+            className="flex-1 p-2 bg-transparent outline-none border dark:border-slate-50 border-slate-400 rounded-md"
             autoFocus
             placeholder="write todo"
             type="text"
@@ -37,7 +37,7 @@ export default function AddForm({ getAllTodos }) {
           />
           <button
             type="submit"
-            className="bg-slate-50 text-slate-800 border border-slate-800 rounded-md px-4 py-2"
+            className="dark:bg-slate-50 dark:text-slate-800 border dark:border-slate-800 border-slate-400 rounded-md px-4 py-2"
           >
             add task
           </button>
