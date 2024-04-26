@@ -1,6 +1,6 @@
 import { Lightbulb, LightbulbOff } from "lucide-react";
 import React, { useEffect, useState } from "react";
-
+import { motion } from "framer-motion";
 export default function Theme() {
   const [isDark, setIsDark] = useState(
     typeof window !== "undefined" &&
@@ -41,26 +41,28 @@ export default function Theme() {
   };
 
   return (
-    <div className="absolute top-4 right-4 md:right-auto md:left-4 z-50">
-      {isDark ? (
-        <>
-          <button
-            className="p-1 border border-yellow-500 shadow-xl shadow-yellow-500 rounded-full"
-            onClick={changeTheme}
-          >
-            <Lightbulb className="text-yellow-500 w-7 h-7 rotate-180" />
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            className="p-1 border border-indigo-600 rounded-full"
-            onClick={changeTheme}
-          >
-            <LightbulbOff className="text-indigo-600 w-7 h-7 rotate-180" />
-          </button>
-        </>
-      )}
-    </div>
+    <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+      <div className="absolute top-4 right-4 md:right-auto md:left-4 z-50">
+        {isDark ? (
+          <>
+            <button
+              className="p-1 border border-yellow-500 shadow-xl shadow-yellow-500 rounded-full"
+              onClick={changeTheme}
+            >
+              <Lightbulb className="text-yellow-500 w-7 h-7 rotate-180" />
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              className="p-1 border border-indigo-600 rounded-full"
+              onClick={changeTheme}
+            >
+              <LightbulbOff className="text-indigo-600 w-7 h-7 rotate-180" />
+            </button>
+          </>
+        )}
+      </div>
+    </motion.div>
   );
 }

@@ -1,19 +1,26 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from "@hookform/error-message";
 import Link from "next/link";
 import { client } from "@/configs/client";
 import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { verifyToken } from "@/utils/auth";
 import { UserModel } from "@/models/User";
 import { connectToDB } from "@/configs/db-connection";
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import transition from "react-element-popper/animations/transition";
+import opacity from "react-element-popper/animations/opacity";
+import jalaali from "jalaali-js";
 
 const schema = yup.object().shape({
   firstname: yup.string().required(),
   lastname: yup.string().required(),
+  // date_birth: yup.string().required(),
   username: yup.string().min(6).required(),
   email: yup.string().email().required(),
   password: yup.string().min(6).required(),
@@ -39,25 +46,38 @@ export default function SignUpPage() {
   });
 
   // handlers
+  // function convertNumbers2English(str) {
+  //   return str
+  //     .replace(/[\u0660-\u0669]/g, function (c) {
+  //       return c.charCodeAt(0) - 0x0660;
+  //     })
+  //     .replace(/[\u06f0-\u06f9]/g, function (c) {
+  //       return c.charCodeAt(0) - 0x06f0;
+  //     });
+  // }
   const onSubmit = async (values) => {
-    try {
-      const res = await client.post("/auth/signup", values);
-      console.log(res);
-      if (res.status === 201) {
-        // localStorage.setItem("user", JSON.stringify(res.data.data));
-        toast.success(res.data.message);
-        setTimeout(() => {
-          router.replace("/");
-        }, 1000);
-      }
-    } catch (err) {
-      toast.error(err.response?.data.message);
-      if (err.response.status === 409) {
-        setTimeout(() => {
-          router.push("/signin");
-        }, 500);
-      }
-    }
+    // console.log(convertNumbers2English(values.date_birth));
+    console.log(values.date_birth);
+
+    // try {
+    //   const res = await client.post("/auth/signup", values);
+    //   console.log(res);
+    //   if (res.status === 201) {
+    //     // localStorage.setItem("user", JSON.stringify(res.data.data));
+    //     toast.success(res.data.message);
+    //     setTimeout(() => {
+    //       router.replace("/");
+    //     }, 1000);
+    //   }
+    // } catch (err) {
+    //   toast.error(err.response?.data.message);
+    //   if (err.response.status === 409) {
+    //     setTimeout(() => {
+    //       router.push("/signin");
+    //     }, 500);
+    //   }
+    // }
+    // console.log(values);
   };
   return (
     <div className="w-screen h-screen mt-20 md:mt-0 flex md:items-center justify-center">
@@ -83,6 +103,32 @@ export default function SignUpPage() {
               )}
             />
           </div>
+          {/* <div className="my-2 flex flex-col gap-y-2">
+            <label htmlFor="date_birth">date birth</label>
+            <DatePicker
+              animations={[
+                opacity(),
+                transition({
+                  from: 40,
+                  transition:
+                    "all 400ms cubic-bezier(0.335, 0.010, 0.030, 1.360)",
+                }),
+              ]}
+              format={"YYYY-MM-DD"}
+              calendar={persian}
+              locale={persian_fa}
+              calendarPosition="bottom"
+              {...register("date_birth")}
+              inputClass="w-full form-input"
+            />
+            <ErrorMessage
+              errors={errors}
+              name="date_birth"
+              render={({ message }) => (
+                <small className="text-rose-500">{message}</small>
+              )}
+            />
+          </div> */}
 
           <div className="my-2 flex flex-col gap-y-2">
             <label htmlFor="lastname">lastname</label>
